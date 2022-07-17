@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Калькулятор на JavaScript</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=windows-1251" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            font-size: 24px;
+        }
+        /**/
+        table.iksweb{
+	        width: 100%;
+	        border-collapse:collapse;
+	        border-spacing:0;
+	        height: auto;
+        }
+        table.iksweb,table.iksweb td, table.iksweb th {
+	        border: 1px solid #595959;
+        }       
+        table.iksweb td,table.iksweb th {   
+        	padding: 3px;
+	        width: 30px;
+	        height: 35px;
+        }
+        table.iksweb th {
+	        background: #347c99; 
+	        color: #fff; 
+	        font-weight: normal;
+        }
+    </style>
+
+    <script type="text/javascript">
+        /*
+        * Функция подсчета стоимости услуг
+        */
+        function calc() {
+            //получаем ссылку на элемент Select (Тип дизайна)
+            var type_design = document.getElementById("type_design");
+            //var is_html = document.getElementById("is_html");
+
+            //получаем ссылку на радиобатоны Высоты забора
+            var fence_height=document.getElementsByName('fence_height');
+            var fence_height_value;
+            for (var i=0;i<fence_height.length; i++) {
+                if (fence_height[i].checked) {
+                    fence_height_value = fence_height[i].value;
+                }
+            }
+
+            //получаем ссылку на радиобатоны Кол-ва прогонов
+            var progons=document.getElementsByName('progons');
+            var progons_value;
+            for (var i=0;i<progons.length; i++) {
+                if (progons[i].checked) {
+                    progons_value = progons[i].value;
+                }
+            }
+
+            //получаем ссылку на радиобатоны Типа профлиста
+            var proflist_type=document.getElementsByName('proflist_type');
+            var proflist_type_value;
+            for (var i=0;i<proflist_type.length; i++) {
+                if (proflist_type[i].checked) {
+                    proflist_type_value = proflist_type[i].value;
+                }
+            }
+            
+            //получаем ссылку на радиобатоны Кол-ва ворот
+            var vorota_count=document.getElementsByName('vorota_count');
+            var vorota_count_value;
+            for (var i=0;i<vorota_count.length; i++) {
+                if (vorota_count[i].checked) {
+                    vorota_count_value = vorota_count[i].value;
+                }
+            }
+            
+            //получаем ссылку на радиобатоны Ширины ворот
+            var vorota_length=document.getElementsByName('vorota_length');
+            var vorota_length_value;
+            for (var i=0;i<vorota_length.length; i++) {
+                if (vorota_length[i].checked) {
+                    vorota_length_value = vorota_length[i].value;
+                }
+            }
+
+            //получаем ссылку на радиобатоны Кол-ва калиток
+            var calitki_count=document.getElementsByName('calitki_count');
+            var calitki_count_value;
+            for (var i=0;i<calitki_count.length; i++) {
+                if (calitki_count[i].checked) {
+                    calitki_count_value = calitki_count[i].value;
+                }
+            }
+
+            //врезные замки
+            var zamok = document.getElementById("is_html_18");
+            //покраска
+            var colored = document.getElementById("is_html_19");
+
+            var fence_lenght = document.getElementById("fence_lenght");
+            //получаем ссылку на элемент span, в него будем писать стоимость 
+            var result = document.getElementById("result"); 
+            var stolbs_result = document.getElementById("stolbs_result"); 
+            var progons_result = document.getElementById("progons_result");
+            var proflist_result = document.getElementById("proflist_result"); 
+
+            var stolbs_count = 0;
+            stolbs_count += Math.ceil((fence_lenght.value - vorota_count_value*vorota_length_value - calitki_count_value) / 2.5 + 1);
+
+            var progons_count = 0
+            progons_count += Math.ceil((fence_lenght.value - vorota_count_value*vorota_length_value - calitki_count_value) * progons_value + progons_value);
+
+            var proflist_count = 0;
+            proflist_count += Math.ceil(fence_lenght.value * fence_height_value + fence_height_value);
+
+            /* var price = 0;
+            price += parseInt(type_design.options[type_design.selectedIndex].value);
+            price += (fence_height_value.checked == true) ? parseInt(fence_height_value.value) : 0;
+            price = parseInt(count.value) * price;
+ 
+            result.innerHTML = price;*/
+
+            stolbs_result.innerHTML = stolbs_count;
+            progons_result.innerHTML = progons_count;
+            proflist_result.innerHTML = proflist_count;
+        }
+ 
+    </script>
+
+</head>
+<body>
+    <b>Тип работ:</b>
+    <select onchange="calc()" id="type_design">
+        <option value="0">Забор</option> <!--value - стоимость-->
+        <option value="0">Выбрать</opstion>
+    </select><br/>
+    Длина забора (м): <input type="text" id="fence_lenght" value="0" onchange="calc()" />
+    <br/>
+
+    <label for="fence_height_class">Выберете высоту забора: </label> <br/>
+    <div class="fence_height_class">
+        <input type="radio" name="fence_height" onchange="calc()" value="1.8" id="is_html_1" /> 
+        <label for="is_html_1">1.8 метра</label><br>
+        <input type="radio" name="fence_height" onchange="calc()" value="2.0" id="is_html_2" />
+        <label for="is_html_2">2.0 метра</label><br>
+        <input type="radio" name="fence_height" onchange="calc()" value="2.3" id="is_html_3" />
+        <label for="is_html_3">2.3 метра</label><br>
+        <input type="radio" name="fence_height" onchange="calc()" value="2.5" id="is_html_4" />
+        <label for="is_html_4">2.5 метра</label><br>
+    </div>
+
+    <label for="progons_class">Выберете кол-во прогонов: </label> <br/>
+    <div class="progons_class">
+        <input type="radio" name="progons" onchange="calc()" value="2" id="is_html_5" /> 
+        <label for="is_html_5">2 прогона</label><br>
+        <input type="radio" name="progons" onchange="calc()" value="3" id="is_html_6" />
+        <label for="is_html_6">3 прогона</label><br>
+        <input type="radio" name="progons" onchange="calc()" value="4" id="is_html_7" />
+        <label for="is_html_7">4 прогона</label><br>
+    </div>
+
+    <label for="proflist_type_class">Выберете тип профлиста: </label> <br/>
+    <div class="proflist_type_class">
+        <input type="radio" name="proflist_type" onchange="calc()" value="1" id="is_html_8" /> 
+        <label for="is_html_8">Оцинкованный</label><br>
+        <input type="radio" name="proflist_type" onchange="calc()" value="2" id="is_html_9" />
+        <label for="is_html_9">Окрас с одной стороны</label><br>
+        <input type="radio" name="proflist_type" onchange="calc()" value="3" id="is_html_10" />
+        <label for="is_html_10">Окрас с двух сторон</label><br>
+    </div>
+
+    <label for="vorota_count_class">Выберете кол-во ворот: </label> <br/>
+    <div class="vorota_count_class">
+        <input type="radio" name="vorota_count" onchange="calc()" value="1" id="is_html_11" /> 
+        <label for="is_html_11">1 штука</label><br>
+        <input type="radio" name="vorota_count" onchange="calc()" value="2" id="is_html_12" />
+        <label for="is_html_12">2 штуки</label><br>
+    </div>
+
+    <label for="vorota_length_class">Выберете ширину ворот: </label> <br/>
+    <div class="vorota_length_class">
+        <input type="radio" name="vorota_length" onchange="calc()" value="3.0" id="is_html_13" /> 
+        <label for="is_html_13">3 метра</label><br>
+        <input type="radio" name="vorota_length" onchange="calc()" value="3.5" id="is_html_14" />
+        <label for="is_html_14">3.5 метра</label><br>
+        <input type="radio" name="vorota_length" onchange="calc()" value="4.0" id="is_html_15" />
+        <label for="is_html_15">4 метра</label><br>
+    </div>
+
+    <label for="calitki_count_class">Выберете кол-во калиток: </label> <br/>
+    <div class="calitki_count_class">
+        <input type="radio" name="calitki_count" onchange="calc()" value="1" id="is_html_16" /> 
+        <label for="is_html_16">1 штука</label><br>
+        <input type="radio" name="calitki_count" onchange="calc()" value="2" id="is_html_17" />
+        <label for="is_html_17">2 штуки</label><br>
+    </div>
+
+    <br>
+    <input type="checkbox" onchange="calc()" value="1" id="is_html_18" />
+    <label for="is_html_18">Врезной замок на калитке</label> <br>
+
+    <input type="checkbox" onchange="calc()" value="1" id="is_html_19" />
+    <label for="is_html_19">Покраска металла</label>
+    <br>
+
+    <!--<br/>
+    <div>Кол-во стобов: <span id="stolbs_result">0</span> штук</div>
+
+    <br/>
+    <div>Длина прогонов: <span id="progons_result">0</span> м.п.</div>
+
+    <br/>
+    <div>Профлист: <span id="proflist_result">0</span> м^2</div>
+
+    <br/>
+    <div>Не Кол-во стобов: <span id="result">0</span> штук</div>-->
+
+
+
+    <table class="iksweb">
+        <tbody>
+            <tr>
+                <td>Наименование</td>
+                <td>Кол-во</td>
+                <td>Цена (руб.)</td>
+                <td>Сумма (руб.)</td>
+            </tr>
+            <tr>
+                <td>Столбы</td>
+                <td>
+                    <div><span id="stolbs_result">0</span> штук</div>
+                </td>
+                <td>1300</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Прогоны</td>
+                <td>
+                    <div>Длина прогонов: <span id="progons_result">0</span> м.п.</div>
+                </td>
+                <td>180</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Покраска</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Профлист</td>
+                <td>
+                    <div>Профлист: <span id="proflist_result">0</span> м^2</div>
+                </td>
+                <td>600</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Калитка</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Замки</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Сумма материалов:</b></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Монтаж забора</td>
+                <td></td>
+                <td>400</td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Монтаж ворот</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Монтаж калитки</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Установка замков</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Стоимость работ:</b></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
