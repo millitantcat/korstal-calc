@@ -10,11 +10,12 @@
     <style>
         body {
             font-family: 'Roboto', sans-serif;
-            font-size: 24px;
+            font-size: 30px;
+            margin: 10px 20px 30px 40px;
         }
         /**/
-        table.iksweb{
-	        width: 100%;
+        table.iksweb {
+	        width: 80%;
 	        border-collapse:collapse;
 	        border-spacing:0;
 	        height: auto;
@@ -32,6 +33,35 @@
 	        color: #fff; 
 	        font-weight: normal;
         }
+        .custom-select {
+            font-family: 'Roboto', sans-serif;
+            position: relative;
+            width: 400px;
+            height: 50px;
+            font-size: 24px;
+        }
+        .custom-input {
+            font-family: 'Roboto', sans-serif;
+            position: relative;
+            width: 392px;
+            height: 45px;
+            font-size: 24px;
+        }
+
+        /*.custom-select select {
+            display: none;
+        }
+
+        .custom-select::after {
+            position: absolute;
+            content: "";
+            top: 14px;
+            right: 10px;
+            width: 0px;
+            height: 0px;
+            border: 6px solid transparent;
+            border-color: #fff transparent transparent transparent;
+        }*/
     </style>
 
     <script type="text/javascript">
@@ -41,7 +71,6 @@
         function calc() {
             //получаем ссылку на элемент Select (Тип дизайна)
             var type_design = document.getElementById("type_design");
-            //var is_html = document.getElementById("is_html");
 
             //получаем ссылку на радиобатоны Высоты забора
             var fence_height=document.getElementsByName('fence_height');
@@ -49,7 +78,29 @@
             for (var i=0;i<fence_height.length; i++) {
                 if (fence_height[i].checked) {
                     fence_height_value = fence_height[i].value;
+                    document.getElementById("dlina_stolba").innerHTML = Number(fence_height_value) + Number(1);
                 }
+            }
+            
+            if (fence_height_value <= 2){
+                document.getElementById("razmer_trubi").innerHTML = "60x60x2";
+            } else {
+                document.getElementById("razmer_trubi").innerHTML = "80x80x2";
+            }
+            //получаем цену одного столба
+            var stolb_cost_value = 0;
+            if (fence_height_value == 1.8) {
+                stolb_cost_value = 900;
+                document.getElementById("stolb_cost").innerHTML = 900;
+            } else if (fence_height_value == 2) {
+                stolb_cost_value = 1000;
+                document.getElementById("stolb_cost").innerHTML = 1000;
+            } else if (fence_height_value == 2.3) {
+                stolb_cost_value = 1250;
+                document.getElementById("stolb_cost").innerHTML = 1250;
+            } else if (fence_height_value == 2.5) {
+                stolb_cost_value = 1350;
+                document.getElementById("stolb_cost").innerHTML = 1350;
             }
 
             //получаем ссылку на радиобатоны Кол-ва прогонов
@@ -69,6 +120,7 @@
                     proflist_type_value = proflist_type[i].value;
                 }
             }
+            document.getElementById("proflist_count").innerHTML = proflist_type_value;
             
             //получаем ссылку на радиобатоны Кол-ва ворот
             var vorota_count=document.getElementsByName('vorota_count');
@@ -87,59 +139,310 @@
                     vorota_length_value = vorota_length[i].value;
                 }
             }
-
+            
             //получаем ссылку на радиобатоны Кол-ва калиток
             var calitki_count=document.getElementsByName('calitki_count');
             var calitki_count_value;
             for (var i=0;i<calitki_count.length; i++) {
                 if (calitki_count[i].checked) {
                     calitki_count_value = calitki_count[i].value;
+                    document.getElementById("calitki_count_check").innerHTML = calitki_count_value;
                 }
             }
+            
+            /*
+            стоимость материалов
+            */
+            //стоимосить калитки
+            var calitki_count_value_sum = 0;
+            if (calitki_count_value == 1) {
+                if (fence_height_value == 1.8){
+                    calitki_count_value_sum = 3500;
+                    document.getElementById("calitki_sum").innerHTML = 3500;
+                }
+                 if (fence_height_value == Number(2)) {
+                    calitki_count_value_sum = 4000;
+                    document.getElementById("calitki_sum").innerHTML = 4000;
+                }
+                else if (fence_height_value == Number(2.3)) {
+                    calitki_count_value_sum = 4500;
+                    document.getElementById("calitki_sum").innerHTML = 4500;
+                }
+                else if (fence_height_value == Number(2.5)) {
+                    calitki_count_value_sum = 5000;
+                    document.getElementById("calitki_sum").innerHTML = 5000;
+                }  
+            } else if (calitki_count_value == 2) {
+                if (fence_height_value == 1.8){
+                    calitki_count_value_sum = 7000;
+                    document.getElementById("calitki_sum").innerHTML = 3500;
+                }
+                else if (fence_height_value == Number(2)) {
+                    calitki_count_value_sum = 8000;
+                    document.getElementById("calitki_sum").innerHTML = 4000;
+                }
+                else if (fence_height_value == Number(2.3)) {
+                    calitki_count_value_sum = 9000;
+                    document.getElementById("calitki_sum").innerHTML = 4500;
+                }
+                else if (fence_height_value == Number(2.5)) {
+                    calitki_count_value_sum = 10000;
+                    document.getElementById("calitki_sum").innerHTML = 5000;
+                }  
+            }
+
+            document.getElementById("calitki_sum_all").innerHTML = calitki_count_value_sum;
 
             //врезные замки
-            var zamok = document.getElementById("is_html_18");
+            var zamki_cost = 0;
+            var zamki_cost_result = 0;
+
+            if (document.getElementById('is_html_18').checked) {
+                zamki_cost = 2000;
+
+                if (calitki_count_value == 1) {
+                    zamki_cost_result = 2000;
+                }
+                else if (calitki_count_value == 2) {
+                    zamki_cost_result = 4000;
+                }
+
+                document.getElementById('zamki_count').innerHTML = "Есть";
+
+            } else {
+                var zamki_cost = 0;
+                var zamki_cost_result = 0;
+                document.getElementById('zamki_count').innerHTML = "Нету";
+            }
+
+            document.getElementById('zamki_cost_result').innerHTML = zamki_cost_result;
+            document.getElementById('zamki_cost').innerHTML = zamki_cost;
+
             //покраска
             var colored = document.getElementById("is_html_19");
 
             var fence_lenght = document.getElementById("fence_lenght");
-            //получаем ссылку на элемент span, в него будем писать стоимость 
+            //получаем ссылку на элемент span, в него будем писать кол-во 
             var result = document.getElementById("result"); 
             var stolbs_result = document.getElementById("stolbs_result"); 
             var progons_result = document.getElementById("progons_result");
             var proflist_result = document.getElementById("proflist_result"); 
+            var colored_result = document.getElementById("colored_result"); 
+            var calitki_result = document.getElementById("calitki_count"); 
 
             var stolbs_count = 0;
-            stolbs_count += Math.ceil((fence_lenght.value - vorota_count_value*vorota_length_value - calitki_count_value) / 2.5 + 1);
+            stolbs_count = Math.ceil((fence_lenght.value - vorota_count_value*vorota_length_value - calitki_count_value) / 2.5 + 1);
 
             var progons_count = 0
-            progons_count += Math.ceil((fence_lenght.value - vorota_count_value*vorota_length_value - calitki_count_value) * progons_value + progons_value);
+            progons_count = Math.ceil(((fence_lenght.value - vorota_count_value*vorota_length_value - calitki_count_value) * progons_value) + Number(progons_value));
 
             var proflist_count = 0;
-            proflist_count += Math.ceil(fence_lenght.value * fence_height_value + fence_height_value);
+            proflist_count = Math.ceil(fence_lenght.value * fence_height_value + Number(fence_height_value));
+            
+            var colored_count = 0;
+            colored_count = Math.ceil(Number(Number(fence_height_value) + 1) * stolbs_count + Number(progons_count) + vorota_count_value * 20 + calitki_count_value * 10) ;
 
-            /* var price = 0;
-            price += parseInt(type_design.options[type_design.selectedIndex].value);
-            price += (fence_height_value.checked == true) ? parseInt(fence_height_value.value) : 0;
-            price = parseInt(count.value) * price;
- 
-            result.innerHTML = price;*/
+            //получаем ссылку на элемент span, в него будем писать стоимость 
+            var stolbs_sum_result = document.getElementById("stolbs_sum");
+            var progons_sum_result = document.getElementById("progons_sum"); 
+            var proflist_sum_result = document.getElementById("proflist_sum");
 
+            var stolbs_sum = 0;
+            stolbs_sum = stolbs_count * stolb_cost_value;
+
+            var progons_sum = 0;
+            progons_sum = progons_count * 180;
+
+            var colored_sum = 0;
+            if (document.getElementById('is_html_19').checked) {
+                colored_sum += colored_count * 40;
+            } else {
+                colored_sum = 0
+            }
+
+            document.getElementById("colored_sum").innerHTML = colored_sum;
+            
+            var proflist_sum = 0;
+            proflist_sum = proflist_count * proflist_type_value;
+
+            var material_sum_result = document.getElementById("material_sum");
+            var material_sum = 0;
+
+            //кол-во материалов
             stolbs_result.innerHTML = stolbs_count;
             progons_result.innerHTML = progons_count;
             proflist_result.innerHTML = proflist_count;
+            colored_result.innerHTML = colored_count;
+            //суммы
+            stolbs_sum_result.innerHTML = stolbs_sum;
+            progons_sum_result.innerHTML = progons_sum;
+            proflist_sum_result.innerHTML = proflist_sum;
+            
+            //общая стоимость материалов
+            material_sum += stolbs_sum + progons_sum + colored_sum + proflist_sum + calitki_count_value_sum + zamki_cost_result; 
+            material_sum_result.innerHTML = material_sum;
+
+            /*
+            стоимость монтажных работ
+            */
+            //стоимосить монтажа калитки
+            var montaj_calitki_count_value_sum = 0;
+            if (calitki_count_value == 1) {
+                if (fence_height_value == 1.8){
+                    montaj_calitki_count_value_sum = 1800;
+                    document.getElementById("montaj_calitki_sum").innerHTML = 1800;
+                }
+                 if (fence_height_value == Number(2)) {
+                    montaj_calitki_count_value_sum = 2000;
+                    document.getElementById("montaj_calitki_sum").innerHTML = 2000;
+                }
+                else if (fence_height_value == Number(2.3)) {
+                    montaj_calitki_count_value_sum = 2300;
+                    document.getElementById("montaj_calitki_sum").innerHTML = 2300;
+                }
+                else if (fence_height_value == Number(2.5)) {
+                    montaj_calitki_count_value_sum = 2500;
+                    document.getElementById("montaj_calitki_sum").innerHTML = 2500;
+                }  
+            } else if (calitki_count_value == 2) {
+                if (fence_height_value == 1.8){
+                    montaj_calitki_count_value_sum = 3600;
+                    document.getElementById("montaj_calitki_sum").innerHTML = 1800;
+                }
+                else if (fence_height_value == Number(2)) {
+                    montaj_calitki_count_value_sum = 4000;
+                    document.getElementById("montaj_calitki_sum").innerHTML = 2000;
+                }
+                else if (fence_height_value == Number(2.3)) {
+                    montaj_calitki_count_value_sum = 4600;
+                    document.getElementById("montaj_calitki_sum").innerHTML = 2300;
+                }
+                else if (fence_height_value == Number(2.5)) {
+                    montaj_calitki_count_value_sum = 5000;
+                    document.getElementById("montaj_calitki_sum").innerHTML = 2500;
+                }  
+            }
+
+            document.getElementById("montaj_calitki_sum_all").innerHTML = montaj_calitki_count_value_sum;
+
+            //стоимосить установки забора
+            var montaj_zabora_value_sum = 0;
+
+            if (fence_height_value == 1.8){
+                if (progons_value == 2){
+                  montaj_zabora_value_sum = 450;
+                }
+               else if (Number(progons_value) == 3){
+                    montaj_zabora_value_sum = 550;  
+                }
+                else
+                    montaj_zabora_value_sum = "NaN";
+            } else if (fence_height_value == 2){
+                if (progons_value == 2){
+                  montaj_zabora_value_sum = 500;
+                }
+                else if (Number(progons_value) == 3){
+                    montaj_zabora_value_sum = 600;
+                }
+                else
+                    montaj_zabora_value_sum = "NaN";
+            } else if (fence_height_value == 2.3){
+                if (progons_value == 3){
+                  montaj_zabora_value_sum = 700;
+                }
+               else if (Number(progons_value) == 4){
+                    montaj_zabora_value_sum = 800; 
+                }
+                else
+                    montaj_zabora_value_sum = "NaN";
+            } else if (fence_height_value == 2.5){
+                if (progons_value == 3){
+                  montaj_zabora_value_sum = 800;
+                }
+               else if (Number(progons_value) == 4){
+                    montaj_zabora_value_sum = 900;   
+                }
+                else
+                    montaj_zabora_value_sum = "NaN";
+            }
+
+            var montaj_zabora_value_sum_result = 0
+            if (!isNaN(parseFloat(montaj_zabora_value_sum)) && isFinite(montaj_zabora_value_sum))
+                montaj_zabora_value_sum_result += Number(montaj_zabora_value_sum) * (fence_lenght.value - 1*calitki_count_value - vorota_count_value * vorota_length_value);
+            else
+                montaj_zabora_value_sum_result = 0;
+
+            document.getElementById("montaj_zabora_sum").innerHTML = montaj_zabora_value_sum;
+            document.getElementById("montaj_zabora_sum_result").innerHTML = montaj_zabora_value_sum_result;
+
+            //стоимость установки ворот
+            var montaj_vorot_value_sum = 0;
+            if (fence_height_value == 1.8) {
+                if (vorota_length_value == 3 || vorota_length_value == 3.5 || vorota_length_value == 4) {
+                    montaj_vorot_value_sum = 3500;
+                    document.getElementById("montaj_vorot_sum").innerHTML = 3500;
+                }
+            } else if (fence_height_value == 2) {
+                if (vorota_length_value == 3 || vorota_length_value == 3.5 || vorota_length_value == 4) {
+                    montaj_vorot_value_sum = 4000;
+                    document.getElementById("montaj_vorot_sum").innerHTML = 4000;
+                }
+            } else if (fence_height_value == 2.3) {
+                if (vorota_length_value == 3 || vorota_length_value == 3.5 || vorota_length_value == 4) {
+                    montaj_vorot_value_sum = 5000;
+                    document.getElementById("montaj_vorot_sum").innerHTML = 5000;
+                }
+            } else if (fence_height_value == 2.5) {
+                if (vorota_length_value == 3 || vorota_length_value == 3.5 || vorota_length_value == 4) {
+                    montaj_vorot_value_sum = 6000;
+                    document.getElementById("montaj_vorot_sum").innerHTML = 6000;
+                }
+            }
+
+            if (vorota_count_value == 1)
+                document.getElementById("montaj_vorot_sum_all").innerHTML = montaj_vorot_value_sum;
+            else {
+                montaj_vorot_value_sum *= 2;
+                document.getElementById("montaj_vorot_sum_all").innerHTML = montaj_vorot_value_sum;
+            } 
+
+            //монтаж замков
+            var montaj_zamkov_sum = 0;
+            var montaj_zamkov_sum_result = 0;
+
+            if (document.getElementById('is_html_18').checked) {
+                montaj_zamkov_sum = 1000;
+
+                if (calitki_count_value == 1) {
+                    montaj_zamkov_sum_result = 1000;
+                }
+                else if (calitki_count_value == 2) {
+                    montaj_zamkov_sum_result = 2000;
+                }
+            } else {
+                var montaj_zamkov_sum = 0;
+                var montaj_zamkov_sum_result = 0;
+            }
+
+            document.getElementById('montaj_zamkov_sum').innerHTML = montaj_zamkov_sum;
+            document.getElementById('montaj_zamkov_sum_result').innerHTML = montaj_zamkov_sum_result;
+
+            var work_sum_value = 0;
+            work_sum_value += montaj_vorot_value_sum + montaj_calitki_count_value_sum + montaj_zamkov_sum_result + montaj_zabora_value_sum_result; //
+            document.getElementById("work_sum").innerHTML = work_sum_value;
+            
         }
- 
     </script>
 
 </head>
 <body>
-    <b>Тип работ:</b>
-    <select onchange="calc()" id="type_design">
+    <b>Тип работ:</b><br>
+    <select onchange="calc()" id="type_design" class="custom-select">
         <option value="0">Забор</option> <!--value - стоимость-->
         <option value="0">Выбрать</opstion>
     </select><br/>
-    Длина забора (м): <input type="text" id="fence_lenght" value="0" onchange="calc()" />
+
+    <b>Длина забора (м): </b><br><input type="text" id="fence_lenght" class="custom-input" value="0" onchange="calc()" />
     <br/>
 
     <label for="fence_height_class">Выберете высоту забора: </label> <br/>
@@ -166,11 +469,11 @@
 
     <label for="proflist_type_class">Выберете тип профлиста: </label> <br/>
     <div class="proflist_type_class">
-        <input type="radio" name="proflist_type" onchange="calc()" value="1" id="is_html_8" /> 
+        <input type="radio" name="proflist_type" onchange="calc()" value="400" id="is_html_8" /> 
         <label for="is_html_8">Оцинкованный</label><br>
-        <input type="radio" name="proflist_type" onchange="calc()" value="2" id="is_html_9" />
+        <input type="radio" name="proflist_type" onchange="calc()" value="450" id="is_html_9" />
         <label for="is_html_9">Окрас с одной стороны</label><br>
-        <input type="radio" name="proflist_type" onchange="calc()" value="3" id="is_html_10" />
+        <input type="radio" name="proflist_type" onchange="calc()" value="500" id="is_html_10" />
         <label for="is_html_10">Окрас с двух сторон</label><br>
     </div>
 
@@ -206,103 +509,197 @@
 
     <input type="checkbox" onchange="calc()" value="1" id="is_html_19" />
     <label for="is_html_19">Покраска металла</label>
-    <br>
+    <br><br>
 
-    <!--<br/>
-    <div>Кол-во стобов: <span id="stolbs_result">0</span> штук</div>
-
-    <br/>
-    <div>Длина прогонов: <span id="progons_result">0</span> м.п.</div>
-
-    <br/>
-    <div>Профлист: <span id="proflist_result">0</span> м^2</div>
-
-    <br/>
-    <div>Не Кол-во стобов: <span id="result">0</span> штук</div>-->
-
-
-
+    <div>NaN - введены не верные данные / данные введены не полностью</div>
     <table class="iksweb">
         <tbody>
-            <tr>
-                <td>Наименование</td>
-                <td>Кол-во</td>
-                <td>Цена (руб.)</td>
-                <td>Сумма (руб.)</td>
+            <tr> 
+                <td><b>Наименование</b></td>
+                <td><b>Кол-во</b></td>
+                <td><b>Цена (руб.)</b></td>
+                <td><b>Сумма (руб.)</b></td>
             </tr>
             <tr>
-                <td>Столбы</td>
+                <td>
+                    <div>Столб, проф.труда <span id="razmer_trubi">0</span>, длина столба <span id="dlina_stolba">0 </span></div>
+                </td>
                 <td>
                     <div><span id="stolbs_result">0</span> штук</div>
                 </td>
-                <td>1300</td>
-                <td></td>
+                <td>
+                    <div><span id="stolb_cost">0</span> руб.</div>
+                </td>
+                <td>
+                    <div><span id="stolbs_sum">0</span> руб.</div>
+                </td>
             </tr>
             <tr>
                 <td>Прогоны</td>
                 <td>
                     <div>Длина прогонов: <span id="progons_result">0</span> м.п.</div>
                 </td>
-                <td>180</td>
-                <td></td>
+                <td>180 руб. </td>
+                <td>
+                    <div><span id="progons_sum">0</span> руб.</div>
+                </td>
             </tr>
             <tr>
                 <td>Покраска</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                    <div>
+                        <span id="colored_result">0</span> м.п.
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <span id="colored_cost">40</span> руб.
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <span id="colored_sum">0</span> руб.
+                    </div>
+                </td>
             </tr>
             <tr>
                 <td>Профлист</td>
                 <td>
                     <div>Профлист: <span id="proflist_result">0</span> м^2</div>
                 </td>
-                <td>600</td>
-                <td></td>
+                <td>
+                    <div><span id="proflist_count">0</span> руб.</div>
+                </td>
+                <td>
+                    <div><span id="proflist_sum">0</span> руб.</div>
+                </td>
             </tr>
             <tr>
                 <td>Калитка</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                    <div><span id="calitki_count_check">-</span></div>
+                </td>
+                <td>
+                    <div><span id="calitki_sum">0</span> руб.</div>
+                </td>
+                <td>
+                    <div><span id="calitki_sum_all">0</span> руб.</div>
+                </td>
             </tr>
             <tr>
                 <td>Замки</td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                    <div><span id="zamki_count">Нету</span></div>
+                </td>
+                <td>
+                    <div><span id="zamki_cost">0</span> руб. </div>
+                </td>
+                <td>
+                    <div><span id="zamki_cost_result">0</span> руб.</div>
+                </td>
             </tr>
             <tr>
                 <td colspan="3"><b>Сумма материалов:</b></td>
-                <td></td>
+                <td>
+                    <div><b><span id="material_sum">0</span> руб.</b></div>
+                </td>
             </tr>
             <tr>
                 <td>Монтаж забора</td>
                 <td></td>
-                <td>400</td>
-                <td></td>
+                <td>
+                    <div><span id="montaj_zabora_sum">0</span> руб.</div>
+                </td>
+                <td>
+                    <div><span id="montaj_zabora_sum_result">0</span> руб.</div>
+                </td>
             </tr>
             <tr>
                 <td>Монтаж ворот</td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                    <div><span id="montaj_vorot_sum">0</span> руб.</div>
+                </td>
+                <td>
+                    <div><span id="montaj_vorot_sum_all">0</span> руб.</div>
+                </td>
             </tr>
             <tr>
                 <td>Монтаж калитки</td>
                 <td></td>
-                <td></td>
-                <td></td>
+                <td>
+                    <div><span id="montaj_calitki_sum">0</span> руб.</div>
+                </td>
+                <td>
+                    <div><span id="montaj_calitki_sum_all">0</span> руб.</div>
+                </td>
             </tr>
             <tr>
                 <td>Установка замков</td>
                 <td></td>
+                <td>
+                    <div><span id="montaj_zamkov_sum">0</span> руб.</div>
+                </td>
+                <td>
+                    <div><span id="montaj_zamkov_sum_result">0</span> руб.</div>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Стоимость работ:</b></td>
+                <td>
+                    <div><b><span id="work_sum">0</span> руб.</b></div>
+                </td>
+            </tr>
+            <tr>
+                <td>Доставка *</td>
+                <td></td>
                 <td></td>
                 <td></td>
             </tr>
             <tr>
-                <td colspan="3"><b>Стоимость работ:</b></td>
+                <td>Выезд специалиста *</td>
                 <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Вывоз генератора *</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Демонтаж существующего забора *</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Саморезы в цвет листа *</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Шпингалеты вниз, гусек *</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Перемычка на ворота (съёмная) *</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td>Бетонирование столбов *</td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="4"><b>* Стоимость услуг обговаривается индивидуально</b></td>
             </tr>
         </tbody>
     </table>
